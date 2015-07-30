@@ -4,12 +4,6 @@
 
     'summary': """Manage trainings""",
 
-    'description': """
-       Open Academy module for managing trainings:
-            - training courses
-            - training sessions
-            - attendees registration
-    """,
 
     'author': "Ferreteria en Mayoreo SA de CV",
     'website': "http://www.ferreteriaenmayoreo.com.mx",
