@@ -7,6 +7,6 @@ class Partner(models.Model):
     # instructors
     instructor = fields.Boolean(default=False)
     session_ids = fields.Many2many('openacademy.session',
-                                   string="Session as instructor",
+                                   string="Session as attendee",
                                    readonly=True) #este campo solo es informativo y no puedo agregar mas registros
 
