@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models
+from openerp import api, exceptions, fields, models
 
 class Session(models.Model):
     _name = 'openacademy.session'
@@ -25,4 +25,29 @@ class Session(models.Model):
             self.taken_seats = 0
         else:
             self.taken_seats = 100.0 * len(self.attendee_ids) / self.seats
+
+    @api.onchange('seats', 'attendee_ids')
+    def _verify_valid_seats(self):
+        print "_verifying valid seats"
+        if self.seats < 0:
+            return {
+                'warning': {
+                    'title': "Incorrect 'seats' value",
+                    'message': "The number of available seats may not be negative",
+                },
+            }
+        if self.seats < len(self.attendee_ids):
+            return {
+                'warning': {
+                    'title': "Too many attendees",
+                    'message': "Increase seats or remove excess attendees",
+                },
+            }
+    @api.one
+    @api.constrains('instructor_id', 'attendee_ids')
+    def _check_instructor_not_in_attendees(self):
+        if self.instructor_id and self.instructor_id in self.attendee_ids:
+            raise exceptions.ValidationError("A session's instructor can't be an attendee")
+  
+
 # vim :expandtab:smart indent: tabstop=4:softtabstop=4:shifwidth=4;
